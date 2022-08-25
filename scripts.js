@@ -4,47 +4,90 @@ const email = document.getElementById("email");
 const password = document.getElementById("password");
 const passwordConfirm = document.getElementById("passwordConfirm");
 
-form.addEventListener("submit", (e) => {
-    e.preventDefault();
+let usernameIsValid = false
+let emailIsValid = false
+let passwordIsValid = false
+let passwordConfirmIsValid = false
 
-    checkInputs();
-});
-
-function checkInputs() {
+// Checar inputs
+username.addEventListener("input", () => {
     const usernameValue = username.value;
-    const emailValue = email.value;
-    const passwordValue = password.value;
-    const passwordConfirmValue = passwordConfirm.value;
 
     if (usernameValue === "") {
-        setErrorFor(username, "Esse campo é obrigatório")}
-        else if (usernameValue.length < 3) {
-            setErrorFor(username, "Nome deve conter no mínimo 3 caracteres")
-        } else setSuccessFor(username)
+        setErrorFor(username, "Esse campo é obrigatório")
+        usernameIsValid = false
+    }
+    else if (usernameValue.length < 3) {
+        setErrorFor(username, "Nome deve conter no mínimo 3 caracteres")
+        usernameIsValid = false
+    } else {
+        setSuccessFor(username)
+        usernameIsValid = true
+    }
+});
+
+email.addEventListener('input', () => {
+    const emailValue = email.value;
 
     if (emailValue === "") {
         setErrorFor(email, "Esse campo é obrigatório")
+        emailIsValid = false
     } else {
         setSuccessFor(email)
+        emailIsValid = true
     }
+});
+
+password.addEventListener("input", () => {
+    const passwordValue = password.value;
 
     if (passwordValue === "") {
         setErrorFor(password, "Esse campo é obrigatório")
+        passwordIsValid = false
     } else if (passwordValue.length < 6) {
         setErrorFor(password, "A senha deve conter no mínimo 6 dígitos")
+        passwordIsValid = false
     } else {
         setSuccessFor(password)
+        passwordIsValid = true
     }
+});
+
+passwordConfirm.addEventListener("input", () => {
+    const passwordValue = password.value;
+    const passwordConfirmValue = passwordConfirm.value;
 
     if (passwordConfirmValue === '') {
         setErrorFor(passwordConfirm, "Esse campo é obrigatório")
-    } else if (passwordConfirmValue != passwordValue) {
+        passwordConfirmIsValid = false
+    } else if (passwordConfirmValue.length < 6) {
+        setErrorFor(passwordConfirm, "A senha deve conter no mínimo 6 dígitos")
+        passwordConfirmIsValid = false
+    } else if (passwordConfirmValue !== passwordValue) {
         setErrorFor(passwordConfirm, "As senhas devem ser iguais")
+        passwordConfirmIsValid = false
     } else {
         setSuccessFor(passwordConfirm)
+        passwordConfirmIsValid = true
     }
-};
+});
 
+// Mostrar modal
+const modal = document.querySelector('#modal')
+
+form.addEventListener("submit", (e) => {
+    e.preventDefault()
+
+    if (usernameIsValid === true && emailIsValid === true && passwordIsValid === true && passwordConfirmIsValid === true) {
+        modal.classList.add('active')
+    }
+})
+
+function closeModal() {
+    modal.classList.remove('active')
+}
+
+// Mensagem de erro e sucesso
 function setErrorFor(input, msg) {
     const formControl = input.parentElement;
     const small = formControl.querySelector('small');

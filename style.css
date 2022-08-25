@@ -25,7 +25,7 @@ body {
     max-width: 100%;
 }
 
-.container .header {
+.container .title {
     text-align: center;
     background-color: rgb(0, 140, 255);
     color: #fff;
@@ -103,4 +103,36 @@ body {
 .form-item.error small {
     visibility: visible;
     color: #f00;
+}
+
+/* Modal */
+#modal {
+    height: 100vh;
+    width: 100vw;
+    background-color: #bbbbbb99;
+    position: fixed;
+    display: none;
+    justify-content: center;
+    align-items: center;
+}
+
+#modal.active {
+    display: flex;
+}
+
+.modal-container {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    color: rgb(0, 140, 255);
+    position: relative;
+    outline: 2px solid rgb(0, 140, 255);
+}
+
+.fa-square-xmark {
+    font-size: 1.5rem;
+    position: absolute;
+    right: -3px;
+    top: -4px;
+    cursor: pointer;
 }
