@@ -15,18 +15,69 @@ username.addEventListener("input", () => {
 
     if (usernameValue === "") {
         setErrorFor(username, "Esse campo é obrigatório")
-        usernameIsValid = false
+    } else if (usernameValue.length < 3) {
+        setErrorFor(username, "Nome deve conter no mínimo 3 caracteres")
+    } else {
+        setSuccessFor(username)
     }
-    else if (usernameValue.length < 3) {
+});
+
+email.addEventListener('input', () => {
+    const emailValue = email.value;
+
+    if (emailValue === "") {
+        setErrorFor(email, "Esse campo é obrigatório")
+    } else {
+        setSuccessFor(email)
+    }
+});
+
+password.addEventListener("input", () => {
+    const passwordValue = password.value;
+
+    if (passwordValue === "") {
+        setErrorFor(password, "Esse campo é obrigatório")
+    } else if (passwordValue.length < 6) {
+        setErrorFor(password, "A senha deve conter no mínimo 6 dígitos")
+    } else {
+        setSuccessFor(password)
+    }
+});
+
+passwordConfirm.addEventListener("input", () => {
+    const passwordValue = password.value;
+    const passwordConfirmValue = passwordConfirm.value;
+
+    if (passwordConfirmValue === '') {
+        setErrorFor(passwordConfirm, "Esse campo é obrigatório")
+    } else if (passwordConfirmValue.length < 6) {
+        setErrorFor(passwordConfirm, "A senha deve conter no mínimo 6 dígitos")
+    } else if (passwordConfirmValue !== passwordValue) {
+        setErrorFor(passwordConfirm, "As senhas devem ser iguais")
+    } else {
+        setSuccessFor(passwordConfirm)
+    }
+});
+
+// Checar submit
+const modal = document.querySelector('#modal')
+
+form.addEventListener("submit", (e) => {
+    e.preventDefault()
+
+    const usernameValue = username.value;
+
+    if (usernameValue === "") {
+        setErrorFor(username, "Esse campo é obrigatório")
+        usernameIsValid = false
+    } else if (usernameValue.length < 3) {
         setErrorFor(username, "Nome deve conter no mínimo 3 caracteres")
         usernameIsValid = false
     } else {
         setSuccessFor(username)
         usernameIsValid = true
     }
-});
-
-email.addEventListener('input', () => {
+    
     const emailValue = email.value;
 
     if (emailValue === "") {
@@ -36,9 +87,7 @@ email.addEventListener('input', () => {
         setSuccessFor(email)
         emailIsValid = true
     }
-});
-
-password.addEventListener("input", () => {
+    
     const passwordValue = password.value;
 
     if (passwordValue === "") {
@@ -51,10 +100,7 @@ password.addEventListener("input", () => {
         setSuccessFor(password)
         passwordIsValid = true
     }
-});
-
-passwordConfirm.addEventListener("input", () => {
-    const passwordValue = password.value;
+    
     const passwordConfirmValue = passwordConfirm.value;
 
     if (passwordConfirmValue === '') {
@@ -70,13 +116,6 @@ passwordConfirm.addEventListener("input", () => {
         setSuccessFor(passwordConfirm)
         passwordConfirmIsValid = true
     }
-});
-
-// Mostrar modal
-const modal = document.querySelector('#modal')
-
-form.addEventListener("submit", (e) => {
-    e.preventDefault()
 
     if (usernameIsValid === true && emailIsValid === true && passwordIsValid === true && passwordConfirmIsValid === true) {
         modal.classList.add('active')
