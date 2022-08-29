@@ -27,7 +27,9 @@ email.addEventListener('input', () => {
 
     if (emailValue === "") {
         setErrorFor(email, "Esse campo é obrigatório")
-    } else {
+    } else if (!validateEmail(emailValue)) {
+        setErrorFor(email, "O email inserido é inválido!")
+    } else if (validateEmail(emailValue)) {
         setSuccessFor(email)
     }
 });
@@ -70,9 +72,6 @@ form.addEventListener("submit", (e) => {
     if (usernameValue === "") {
         setErrorFor(username, "Esse campo é obrigatório")
         usernameIsValid = false
-    } else if (usernameValue.length < 3) {
-        setErrorFor(username, "Nome deve conter no mínimo 3 caracteres")
-        usernameIsValid = false
     } else {
         setSuccessFor(username)
         usernameIsValid = true
@@ -93,9 +92,6 @@ form.addEventListener("submit", (e) => {
     if (passwordValue === "") {
         setErrorFor(password, "Esse campo é obrigatório")
         passwordIsValid = false
-    } else if (passwordValue.length < 6) {
-        setErrorFor(password, "A senha deve conter no mínimo 6 dígitos")
-        passwordIsValid = false
     } else {
         setSuccessFor(password)
         passwordIsValid = true
@@ -105,12 +101,6 @@ form.addEventListener("submit", (e) => {
 
     if (passwordConfirmValue === '') {
         setErrorFor(passwordConfirm, "Esse campo é obrigatório")
-        passwordConfirmIsValid = false
-    } else if (passwordConfirmValue.length < 6) {
-        setErrorFor(passwordConfirm, "A senha deve conter no mínimo 6 dígitos")
-        passwordConfirmIsValid = false
-    } else if (passwordConfirmValue !== passwordValue) {
-        setErrorFor(passwordConfirm, "As senhas devem ser iguais")
         passwordConfirmIsValid = false
     } else {
         setSuccessFor(passwordConfirm)
@@ -143,4 +133,10 @@ function setSuccessFor(input) {
 
     // Classe success
     formControl.className = "form-item success"
+}
+
+function validateEmail(email) {
+    let re = /\S+@\S+\.\S+/;
+    return re.test(email)
+    console.log(re)
 }
