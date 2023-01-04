@@ -10,54 +10,68 @@ let passwordIsValid = false
 let passwordConfirmIsValid = false
 
 // Checar inputs
-username.addEventListener("input", () => {
+
+username.addEventListener("change", () => {
     const usernameValue = username.value;
 
     if (usernameValue === "") {
         setErrorFor(username, "Esse campo é obrigatório")
+        usernameIsValid = false
     } else if (usernameValue.length < 3) {
         setErrorFor(username, "Nome deve conter no mínimo 3 caracteres")
+        usernameIsValid = false
     } else {
         setSuccessFor(username)
+        usernameIsValid = true
     }
 });
 
-email.addEventListener('input', () => {
+email.addEventListener('change', () => {
     const emailValue = email.value;
 
     if (emailValue === "") {
         setErrorFor(email, "Esse campo é obrigatório")
+        emailIsValid = false
     } else if (!validateEmail(emailValue)) {
         setErrorFor(email, "O email inserido é inválido!")
+        emailIsValid = false
     } else if (validateEmail(emailValue)) {
         setSuccessFor(email)
+        emailIsValid = true
     }
 });
 
-password.addEventListener("input", () => {
+password.addEventListener("change", () => {
     const passwordValue = password.value;
 
     if (passwordValue === "") {
         setErrorFor(password, "Esse campo é obrigatório")
+        passwordIsValid = false
     } else if (passwordValue.length < 6) {
         setErrorFor(password, "A senha deve conter no mínimo 6 dígitos")
+        passwordIsValid = false
     } else {
         setSuccessFor(password)
+        passwordIsValid = true
     }
 });
 
-passwordConfirm.addEventListener("input", () => {
+passwordConfirm.addEventListener("change", () => {
     const passwordValue = password.value;
     const passwordConfirmValue = passwordConfirm.value;
 
     if (passwordConfirmValue === '') {
         setErrorFor(passwordConfirm, "Esse campo é obrigatório")
+        passwordConfirmIsValid = false
     } else if (passwordConfirmValue.length < 6) {
         setErrorFor(passwordConfirm, "A senha deve conter no mínimo 6 dígitos")
+        passwordConfirmIsValid = false
     } else if (passwordConfirmValue !== passwordValue) {
         setErrorFor(passwordConfirm, "As senhas devem ser iguais")
+        passwordConfirmIsValid = false
     } else {
         setSuccessFor(passwordConfirm)
+        passwordConfirmIsValid = true
     }
 });
 
@@ -67,47 +81,33 @@ const modal = document.querySelector('#modal')
 form.addEventListener("submit", (e) => {
     e.preventDefault()
 
-    const usernameValue = username.value;
+    let cont = 0
 
-    if (usernameValue === "") {
-        setErrorFor(username, "Esse campo é obrigatório")
-        usernameIsValid = false
-    } else {
-        setSuccessFor(username)
-        usernameIsValid = true
+    if (!usernameIsValid) {
+        setErrorFor(username, "Preencha o campo corretamente")
+    } else if (usernameIsValid) {
+        cont += 1
+    }
+
+    if (!emailIsValid) {
+        setErrorFor(email, "Preencha o campo corretamente")
+    } else if (emailIsValid){
+        cont += 1
     }
     
-    const emailValue = email.value;
-
-    if (emailValue === "") {
-        setErrorFor(email, "Esse campo é obrigatório")
-        emailIsValid = false
-    } else {
-        setSuccessFor(email)
-        emailIsValid = true
-    }
-    
-    const passwordValue = password.value;
-
-    if (passwordValue === "") {
-        setErrorFor(password, "Esse campo é obrigatório")
-        passwordIsValid = false
-    } else {
-        setSuccessFor(password)
-        passwordIsValid = true
-    }
-    
-    const passwordConfirmValue = passwordConfirm.value;
-
-    if (passwordConfirmValue === '') {
-        setErrorFor(passwordConfirm, "Esse campo é obrigatório")
-        passwordConfirmIsValid = false
-    } else {
-        setSuccessFor(passwordConfirm)
-        passwordConfirmIsValid = true
+    if (!passwordIsValid) {
+        setErrorFor(password, "Preencha o campo corretamente")
+    } else if (passwordIsValid) {
+        cont += 1
     }
 
-    if (usernameIsValid === true && emailIsValid === true && passwordIsValid === true && passwordConfirmIsValid === true) {
+    if (!passwordConfirmIsValid) {
+        setErrorFor(passwordConfirm, "Preencha o campo corretamente")
+    } else if (passwordConfirmIsValid) {
+        cont += 1
+    }
+
+    if (cont == 4) {
         modal.classList.add('active')
     }
 })
@@ -138,5 +138,4 @@ function setSuccessFor(input) {
 function validateEmail(email) {
     let re = /\S+@\S+\.\S+/;
     return re.test(email)
-    console.log(re)
 }
