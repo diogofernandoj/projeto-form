@@ -5,60 +5,102 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
-    <title>Form</title>
+    <title>Login</title>
 </head>
 <body>
+
     <div class="container">
+        <div class="forms">
+            <div class="form login">
+                <h2 class="title">Login</h2>
 
-        <div class="title">
-            <h2>Criar conta</h2>
+                <form action="#" autocomplete="off">
+
+                    <div class="form-field">
+                        <input type="text" placeholder="Usuário" id="login-username" required>
+                        <i class="fa-solid fa-user icon-input"></i>
+                    </div>
+
+                    <div class="form-field">
+                        <input type="password" placeholder="Password" id="login-password" required>
+                        <i class="fa-solid fa-lock icon-input"></i>
+                    </div>
+                    <p class="login-error">Nome de usuário e/ou senha inválidos</p>
+
+                    <button type="button" id="login-btn">Entrar</button>
+
+                    <div class="login-signup">
+                        <p class="text">Não tem cadastro? <span id="signup-btn">Cadastre-se</span></p>
+                    </div>
+
+                </form>
+            </div>
+
+            <div class="form registration">
+                <h2 class="title">Cadastro</h2>
+
+                <form action="#" autocomplete="off">
+
+                    <div class="form-field">
+                        <input type="text" id="register-username" placeholder="Usuário" required>
+                        <i class="fa-solid fa-user icon-input"></i>
+
+                        <i class="fa-solid fa-circle-check icon-msg"></i>
+                        <i class="fa-solid fa-circle-exclamation icon-msg"></i>
+                        <small>Mensagem de erro</small>
+                    </div>
+
+                    <div class="form-field">
+                        <input type="text" id="register-email" placeholder="Email" required>
+                        <i class="fa-solid fa-envelope icon-input"></i>
+
+                        <i class="fa-solid fa-circle-check icon-msg"></i>
+                        <i class="fa-solid fa-circle-exclamation icon-msg"></i>
+                        <small>Mensagem de erro</small>
+                    </div>
+
+                    <div class="form-field">
+                        <input type="password" id="register-password" placeholder="Senha" required>
+                        <i class="fa-solid fa-lock icon-input"></i>
+
+                        <i class="fa-solid fa-circle-check icon-msg"></i>
+                        <i class="fa-solid fa-circle-exclamation icon-msg"></i>
+                        <small>Mensagem de erro</small>
+                    </div>
+
+                    <div class="form-field">
+                        <input type="password" id="register-confirm-password" placeholder="Confirme a senha" required>
+                        <i class="fa-solid fa-lock icon-input"></i>
+
+                        <i class="fa-solid fa-circle-check icon-msg"></i>
+                        <i class="fa-solid fa-circle-exclamation icon-msg"></i>
+                        <small>Mensagem de erro</small>
+                    </div>
+
+                    <button type="button" id="register-btn">Cadastrar</button>
+
+                    <div class="login-signin">
+                        <p class="text">Ja tem conta? <span id="signin-btn">Fazer login</span></p>
+                    </div>
+
+                </form>
+            </div>
         </div>
-
-        <form id="form" class="form" autocomplete="off">
-
-            <div class="form-item">
-                <label for="username">Nome</label>
-                <input type="text" id="username" placeholder="Digite seu nome de usuário">
-                <i class="fa-solid fa-exclamation-circle"></i>
-                <i class="fa-solid fa-check-circle"></i>
-                <small>Mensagem de erro</small>
-            </div>
-            <div class="form-item">
-                <label for="email">Email</label>
-                <input type="text" id="email" placeholder="Digite seu email">
-                <i class="fa-solid fa-exclamation-circle"></i>
-                <i class="fa-solid fa-check-circle"></i>
-                <small>Mensagem de erro</small>
-            </div>
-            <div class="form-item">
-                <label for="password">Senha</label>
-                <input type="password" id="password" placeholder="Digite sua senha">
-                <i class="fa-solid fa-exclamation-circle"></i>
-                <i class="fa-solid fa-check-circle"></i>
-                <small>Mensagem de erro</small>
-            </div>
-            <div class="form-item">
-                <label for="passwordConfirm">Confirmar senha</label>
-                <input type="password" id="passwordConfirm" placeholder="Digite sua senha novamente">
-                <i class="fa-solid fa-exclamation-circle"></i>
-                <i class="fa-solid fa-check-circle"></i>
-                <small>Mensagem de erro</small>
-            </div>
-            <button type="submit">Enviar</button>
-        </form>
-
     </div>
 
-    <div id="modal" onclick="closeModal()">
-        <div class="modal-container">
-            <p>Cadastro realizado com sucesso! :)</i></p>
-            <i class="fa-solid fa-square-xmark"></i>
+    <div class="modal-container">
+        <div class="modal">
+            <i class="fa-solid fa-circle-check"></i>
+            <p>Cadastro realizado com sucesso!</p>
+            <p>Entre com seus dados Usuário e Senha para fazer login</p>
+            <p class="modal-btn">Fechar</p>
         </div>
     </div>
+
+    <div class="home-container"></div>
 
     <!-- FontAwesome -->
     <script src="https://kit.fontawesome.com/d46c525ea6.js" crossorigin="anonymous"></script>
-
     <!-- Meu script -->
     <script src="scripts.js"></script>
 </body>

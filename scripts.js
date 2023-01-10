@@ -1,141 +1,172 @@
-const form = document.getElementById("form")
-const username = document.getElementById("username");
-const email = document.getElementById("email");
-const password = document.getElementById("password");
-const passwordConfirm = document.getElementById("passwordConfirm");
+const container = document.querySelector('.container')
+const signinBtn = document.getElementById('signin-btn')
+const signupBtn = document.getElementById('signup-btn')
 
-let usernameIsValid = false
-let emailIsValid = false
-let passwordIsValid = false
-let passwordConfirmIsValid = false
+signupBtn.addEventListener('click', () => {
+    container.classList.add('active')
+})
+signinBtn.addEventListener('click', () => {
+    container.classList.remove('active')
+})
 
-// Checar inputs
 
-username.addEventListener("change", () => {
-    const usernameValue = username.value;
+const getLocalStorage = () => JSON.parse(localStorage.getItem('db')) ?? []
+const setLocalStorage = (items) => localStorage.setItem('db', JSON.stringify(items))
+// Validar inputs
+const registerUsername = document.getElementById('register-username')
+const registerEmail = document.getElementById('register-email')
+const registerPassword = document.getElementById('register-password')
+const registerConfirmPassword = document.getElementById('register-confirm-password')
+const registerBtn = document.getElementById('register-btn')
 
-    if (usernameValue === "") {
-        setErrorFor(username, "Esse campo é obrigatório")
-        usernameIsValid = false
-    } else if (usernameValue.length < 3) {
-        setErrorFor(username, "Nome deve conter no mínimo 3 caracteres")
-        usernameIsValid = false
+registerBtn.addEventListener('click', () => {
+    checkRegistration()
+})
+
+function checkRegistration() {
+    if (registerUsername.value === '') {
+        setErrorFor(registerUsername, 'O nome de usuário é obrigatório')
+    } else if (!isUsernameValid(registerUsername.value)) {
+        setErrorFor(registerUsername, 'Este nome de usuário já existe')
     } else {
-        setSuccessFor(username)
-        usernameIsValid = true
+        setSuccessFor(registerUsername)
     }
-});
 
-email.addEventListener('change', () => {
-    const emailValue = email.value;
-
-    if (emailValue === "") {
-        setErrorFor(email, "Esse campo é obrigatório")
-        emailIsValid = false
-    } else if (!validateEmail(emailValue)) {
-        setErrorFor(email, "O email inserido é inválido!")
-        emailIsValid = false
-    } else if (validateEmail(emailValue)) {
-        setSuccessFor(email)
-        emailIsValid = true
-    }
-});
-
-password.addEventListener("change", () => {
-    const passwordValue = password.value;
-
-    if (passwordValue === "") {
-        setErrorFor(password, "Esse campo é obrigatório")
-        passwordIsValid = false
-    } else if (passwordValue.length < 6) {
-        setErrorFor(password, "A senha deve conter no mínimo 6 dígitos")
-        passwordIsValid = false
+    if (registerEmail.value === '') {
+        setErrorFor(registerEmail, 'O email é obrigatório')
+    } else if (!isEmailValid(registerEmail.value)) {
+        setErrorFor(registerEmail, 'Por favor, insira um email válido')
     } else {
-        setSuccessFor(password)
-        passwordIsValid = true
+        setSuccessFor(registerEmail)
     }
-});
 
-passwordConfirm.addEventListener("change", () => {
-    const passwordValue = password.value;
-    const passwordConfirmValue = passwordConfirm.value;
-
-    if (passwordConfirmValue === '') {
-        setErrorFor(passwordConfirm, "Esse campo é obrigatório")
-        passwordConfirmIsValid = false
-    } else if (passwordConfirmValue.length < 6) {
-        setErrorFor(passwordConfirm, "A senha deve conter no mínimo 6 dígitos")
-        passwordConfirmIsValid = false
-    } else if (passwordConfirmValue !== passwordValue) {
-        setErrorFor(passwordConfirm, "As senhas devem ser iguais")
-        passwordConfirmIsValid = false
+    if (registerPassword.value === '') {
+        setErrorFor(registerPassword, 'A senha é obrigatória')
+    } else if ((registerPassword.value).length < 6) {
+        setErrorFor(registerPassword, 'A senha deve conter no mínimo 6 dígitos')
     } else {
-        setSuccessFor(passwordConfirm)
-        passwordConfirmIsValid = true
+        setSuccessFor(registerPassword)
     }
-});
 
-// Checar submit
-const modal = document.querySelector('#modal')
+    if (registerConfirmPassword.value === '') {
+        setErrorFor(registerConfirmPassword, 'A senha é obrigatória')
+    } else if ((registerConfirmPassword.value).length < 6) {
+        setErrorFor(registerConfirmPassword, 'A senha deve conter ao mínimo 6 dígitos')
+    } else if (registerConfirmPassword.value !== registerPassword.value) {
+        setErrorFor(registerConfirmPassword, 'As senhas devem ser iguais')
+    } else {
+        setSuccessFor(registerConfirmPassword)
+    }
 
-form.addEventListener("submit", (e) => {
-    e.preventDefault()
+    const formFields = document.querySelectorAll('.registration .form-field')
+    const isRegistrationValid = [...formFields].every(formField => {
+        return (formField.className === 'form-field success')
+    })
+    if (isRegistrationValid) {
+        openModal()
+        updateDB(registerUsername.value, registerPassword.value)
+        registerUsername.value = ''
+        registerEmail.value = ''
+        registerPassword.value = ''
+        registerConfirmPassword.value = ''
 
+        formFields.forEach(formField => {
+            formField.className = 'form-field'
+        })
+    
+        container.classList.remove('active')
+    }
+}
+
+function isUsernameValid(username) {
+    const itemsDB = getLocalStorage()
     let cont = 0
 
-    if (!usernameIsValid) {
-        setErrorFor(username, "Preencha o campo corretamente")
-    } else if (usernameIsValid) {
-        cont += 1
-    }
+    itemsDB.forEach(item => {
+        if(username === item.username) {
+            cont += 1
+        }
+    })
 
-    if (!emailIsValid) {
-        setErrorFor(email, "Preencha o campo corretamente")
-    } else if (emailIsValid){
-        cont += 1
+    if(cont>1) {
+        return false
+    } else if (cont===0){
+        return true
     }
-    
-    if (!passwordIsValid) {
-        setErrorFor(password, "Preencha o campo corretamente")
-    } else if (passwordIsValid) {
-        cont += 1
-    }
+}
 
-    if (!passwordConfirmIsValid) {
-        setErrorFor(passwordConfirm, "Preencha o campo corretamente")
-    } else if (passwordConfirmIsValid) {
-        cont += 1
-    }
+function updateDB(username, password) {
+    const itemsDB = getLocalStorage()
+    itemsDB.push({username: username, password: password})
+    setLocalStorage(itemsDB)
+}
 
-    if (cont == 4) {
-        modal.classList.add('active')
+const modal = document.querySelector('.modal-container')
+const modalBtn = document.querySelector('.modal-btn')
+
+function openModal() {
+    modal.classList.add('active')
+}
+modalBtn.addEventListener('click', () => {
+    modal.classList.remove('active')
+})
+
+// Classe success e error
+function setSuccessFor(input) {
+    const formField = input.parentElement
+    formField.className = 'form-field success'
+}
+function setErrorFor(input, message) {
+    const formField = input.parentElement
+    formField.className = 'form-field error'
+
+    // error message
+    const small = formField.querySelector('small')
+    small.innerText = message
+}
+
+function isEmailValid(email) {
+    let re = /\S+@\S+\.\S+/;
+    return re.test(email)
+}
+
+// Fazer login
+const loginUsername = document.getElementById('login-username')
+const loginPassword = document.getElementById('login-password')
+const loginBtn = document.getElementById('login-btn')
+const loginErrorMsg = document.querySelector('.login-error')
+const home = document.querySelector('.home-container')
+
+loginBtn.addEventListener('click', () => {
+    if (!!isLoginValid(loginUsername.value, loginPassword.value)) {
+        home.innerHTML = `
+        <div class="home"><h2>Seja bem-vindo(a), <span>${loginUsername.value}</span></h2>
+        <p onclick="closeHome()">Clique aqui para retornar a tela de login</p></div>`
+
+        home.classList.add('active')
+
+        loginUsername.value = ''
+        loginPassword.value = ''
+    } else {
+        loginUsername.value = ''
+        loginPassword.value = ''
+
+        loginErrorMsg.style.display = 'block'
     }
 })
 
-function closeModal() {
-    modal.classList.remove('active')
+function closeHome() {
+    home.classList.remove('active')
 }
 
-// Mensagem de erro e sucesso
-function setErrorFor(input, msg) {
-    const formControl = input.parentElement;
-    const small = formControl.querySelector('small');
+function isLoginValid(username, password) {
+    const itemsDB = getLocalStorage()
+    let login = false
 
-    // Classe error
-    formControl.className = "form-item error";
-
-    // Mensagem de erro
-    small.innerText = msg;
-};
-
-function setSuccessFor(input) {
-    const formControl = input.parentElement;
-
-    // Classe success
-    formControl.className = "form-item success"
-}
-
-function validateEmail(email) {
-    let re = /\S+@\S+\.\S+/;
-    return re.test(email)
+    itemsDB.forEach(item => {
+        if(item.username === username && item.password === password) {
+            login = true
+        }
+    })
+    return login
 }
